@@ -1,6 +1,6 @@
 {
   "name": "wx-connect",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "微信公众平台接口开发框架",
   "main": "index.js",
   "scripts": {

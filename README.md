@@ -18,3 +18,9 @@ app.listen(80);
 ```bash
 $ npm install wx-connect
 ```
+
+
+
+## License
+
+[MIT](LICENSE)

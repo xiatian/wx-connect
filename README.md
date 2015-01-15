@@ -33,12 +33,14 @@ $ npm install wx-connect
 
 安装后在项目目录下新建 `app.js` 文件：
 
-加载依赖
+### 加载依赖
 
 ```js
 var wxConnect = require('wx-connect');
 ```
-配置信息，其中`appToken`需和微信开发者模式中设置的`token`保持一直，其余2个参数是微信获取accsess_token时用，可忽略
+### 配置信息
+
+其中`appToken`需和微信开发者模式中设置的`token`保持一致，其余2个参数是微信获取accsess_token时用，可忽略
 
 ```js
 var config = {
@@ -48,27 +50,77 @@ var config = {
 };
 ```
 
-实例化应用
+### 实例化应用
 
 ```js
 var app = wxConnect(config);
 ```
 
-文本消息处理，app.text定义接受用户在微信端输入的文本消息处理，
+###文本消息处理
+
+`app.text` 定义接受用户在微信端输入的文本消息处理
 
 ```js
 app.text = function(req, res, next) {
-  
+  res.text('您输入的内容：' + req.message.content); // 返回用户其输入的内容
 };
 ```
 
-> `unction(req, res, next) {}`在`connect`和`express`框架中叫做中间件，是一个带3个参数的回调函数
-> `req`里面包含了用户的请求信息，`res`用于向用户返回响应，它们源自`http.createServer(function(res, req){})`里的`req`和`res`，
-> `wx-connect`对其进行了简单的扩展：
-> > `res.message`包含了用户从微信端发送的消息或事件内容
-> > `res.text()`和`res.news()`方法用于向用户回复文本和图文消息。
+> `function(req, res, next) {}`在`connect`和`express`框架中叫做中间件，是一个带3个参数的回调函数
+> 
+> `req`和`res`源自`http.createServer(function(res, req){})`里的`req`和`res`，`wx-connect`对其进行了简单的扩展
+> 
+> `req`里面包含了用户的请求信息，`res.message`包含了用户从微信端发送的消息或事件内容
+> 
+> `res`用于向用户返回响应，`res.reply()`方法用于返回格式化的消息给微信端用户，`res.text()`和`res.news()`方法用于向用户回复文本和图文消息，`res.debug()`用于打印调试信息，当不知道用户端发送的消息内容时使用
 
+`req.message`包含的消息内容如下：
 
+```js
+req.message = {
+	fromUserName: 'xxoo', // 发送消息的用户微信OpenID
+	toUserName: 'xxoo', // 接受消息的公众号OpenID
+	msgType: 'text', // 消息类型 text：文本，event：事件
+	content: 'abc', // 文本消息内容
+	event: 'click', // 事件类型 click：自定义菜单点击，LOCATION：地理位置上报，subscribe：关注，unsubscribe：取消关注
+	eventKey: 'USER_KEY' // 自定义菜单点击事件KEY
+}
+```
+
+`res.news()`图文消息参数格式：
+
+```js
+res.news([{title: '标题', description: '描述', picUrl: '图片URL', url: '跳转链接'}...])
+```
+> 可参照[微信公众平台开发者文档](http://mp.weixin.qq.com/wiki/14/89b871b5466b19b3efa4ada8e577d45e.html)中的回复消息格式，不同之处是键名第一个字母改为小写
+
+### 地理位置上报事件处理
+
+```js
+app.location ＝ function(req, res, next) {}
+```
+
+### 定义菜单点击事件处理
+
+```js
+app.menu ＝ function(req, res, next) {}
+```
+
+### 用户关注事件处理
+
+```js
+app.subscribe ＝ function(req, res, next) {}
+```
+
+### 用户取消关注事件处理
+
+```js
+app.unsubscribe ＝ function(req, res, next) {}
+```
+
+### 启动应用
+
+```js
 // 启动server
 app.listen(80, function() {
   console.log('Server is running on 80'); // 注意：微信公众号接口只支持80端口

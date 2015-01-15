@@ -66,13 +66,13 @@ app.text = function(req, res, next) {
 };
 ```
 
-> `function(req, res, next) {}`在`connect`和`express`框架中叫做中间件，是一个带3个参数的回调函数
-> 
-> `req`和`res`源自`http.createServer(function(res, req){})`里的`req`和`res`，`wx-connect`对其进行了简单的扩展
-> 
-> `req`里面包含了用户的请求信息，`res.message`包含了用户从微信端发送的消息或事件内容
-> 
-> `res`用于向用户返回响应，`res.reply()`方法用于返回格式化的消息给微信端用户，`res.text()`和`res.news()`方法用于向用户回复文本和图文消息，`res.debug()`用于打印调试信息，当不知道用户端发送的消息内容时使用
+`function(req, res, next) {}`在`connect`和`express`框架中叫做中间件，是一个带3个参数的回调函数
+
+`req`和`res`源自`http.createServer(function(res, req){})`里的`req`和`res`，`wx-connect`对其进行了简单的扩展
+
+`req`里面包含了用户的请求信息，`res.message`包含了用户从微信端发送的消息或事件内容
+
+`res`用于向用户返回响应，`res.reply()`方法用于返回格式化的消息给微信端用户，`res.text()`和`res.news()`方法用于向用户回复文本和图文消息，`res.debug()`用于打印调试信息，当不知道用户端发送的消息内容时使用
 
 `req.message`包含的消息内容如下：
 
@@ -87,12 +87,13 @@ req.message = {
 }
 ```
 
-`res.news()`图文消息参数格式：
+`res.news([..])`图文消息参数格式：
 
 ```js
 res.news([{title: '标题', description: '描述', picUrl: '图片URL', url: '跳转链接'}...])
 ```
-> 可参照[微信公众平台开发者文档](http://mp.weixin.qq.com/wiki/14/89b871b5466b19b3efa4ada8e577d45e.html)中的回复消息格式，不同之处是键名第一个字母改为小写
+
+可参照[微信公众平台开发者文档](http://mp.weixin.qq.com/wiki/14/89b871b5466b19b3efa4ada8e577d45e.html)中的回复消息格式，不同之处是键名第一个字母改为小写
 
 ### 地理位置上报事件处理
 
@@ -130,7 +131,19 @@ app.listen(80, function() {
 ## 演示案例
 
 [WXWeather](https://github.com/xiatian/WXWeather) 使用 `wx-connect` 开发微信公众平台接口，实现了一个天气查询功能的微信公众号。
- 
+
+## 相关文档
+
+* [NodeJS](http://www.nodejs.org/)
+* [connect](https://github.com/senchalabs/connect)
+* [微信公众平台开发者文档](http://mp.weixin.qq.com/wiki/home/index.html)
+
+## 微信公众平台测试号申请
+
+微信为没有申请公众号又想体验公众平台接口开发的同学提供了测试号申请，直接体验和测试公众平台所有高级接口。
+
+申请地址：<http://mp.weixin.qq.com/debug/cgi-bin/sandbox?t=sandbox/login>
+
 ## Test
 
 ```bash
